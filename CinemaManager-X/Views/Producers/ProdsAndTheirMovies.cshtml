@@ -1,0 +1,57 @@
+@model IEnumerable<CinemaManager_X.Models.Cinema.Producer>
+
+@{
+    ViewData["Title"] = "Producers and Their Movies";
+}
+
+<h1>All Producers and Their Movies</h1>
+
+<p>
+    <a asp-action="Index">Back to Producers List</a>
+</p>
+
+@foreach (var producer in Model)
+{
+    <div class="card mb-3">
+        <div class="card-header">
+            <h3>@producer.Name</h3>
+        </div>
+        <div class="card-body">
+            <p><strong>Nationality:</strong> @producer.Nationality</p>
+            <p><strong>Email:</strong> @producer.Email</p>
+
+            @if (producer.Movies.Any())
+            {
+                <h5>Movies:</h5>
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Genre</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var movie in producer.Movies)
+                            {
+                                <tr>
+                                    <td>@movie.Title</td>
+                                    <td>@movie.Genre</td>
+                                    <td>
+                                        <a asp-controller="Movies" asp-action="Details" asp-route-id="@movie.Id" class="btn btn-info btn-sm">Details</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p><em>No movies for this producer.</em></p>
+            }
+            <a asp-action="ProdAndTheirMovies" asp-route-id="@producer.Id" class="btn btn-primary btn-sm">View Details</a>
+        </div>
+    </div>
+}

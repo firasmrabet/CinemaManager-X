@@ -18,13 +18,11 @@ namespace CinemaManager_X.Controllers
             _context = context;
         }
 
-        
         public async Task<IActionResult> Index()
         {
             return View(await _context.Producers.ToListAsync());
         }
 
-        // GET: Producers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -42,13 +40,11 @@ namespace CinemaManager_X.Controllers
             return View(producer);
         }
 
-        // GET: Producers/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Producers/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Nationality,Email")] Producer producer)
@@ -62,7 +58,6 @@ namespace CinemaManager_X.Controllers
             return View(producer);
         }
 
-        // GET: Producers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -78,7 +73,6 @@ namespace CinemaManager_X.Controllers
             return View(producer);
         }
 
-        // POST: Producers/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Nationality,Email")] Producer producer)
@@ -111,7 +105,6 @@ namespace CinemaManager_X.Controllers
             return View(producer);
         }
 
-        // GET: Producers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -129,7 +122,6 @@ namespace CinemaManager_X.Controllers
             return View(producer);
         }
 
-        // POST: Producers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -146,6 +138,55 @@ namespace CinemaManager_X.Controllers
         private bool ProducerExists(int id)
         {
             return _context.Producers.Any(e => e.Id == id);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ProdAndTheirMovies(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var producer = await _context.Producers
+                .Include(p => p.Movies)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (producer == null)
+            {
+                return NotFound();
+            }
+
+            return View(producer);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ProdsAndTheirMovies()
+        {
+            var producersWithMovies = await _context.Producers
+                .Include(p => p.Movies)
+                .ToListAsync();
+
+            return View(producersWithMovies);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ProdsAndTheirMovies_UsingModel()
+        {
+            var result = from p in _context.Producers
+                        join m in _context.Movies on p.Id equals m.ProducerId
+                        select new
+                        {
+                            ProducerId = p.Id,
+                            ProducerName = p.Name,
+                            ProducerNationality = p.Nationality,
+                            ProducerEmail = p.Email,
+                            MovieId = m.Id,
+                            MovieTitle = m.Title,
+                            MovieGenre = m.Genre
+                        };
+
+            return View(await result.ToListAsync());
         }
     }
 }

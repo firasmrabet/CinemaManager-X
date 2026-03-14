@@ -1,30 +1,41 @@
 @model IEnumerable<CinemaManager_X.Models.Cinema.Movie>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Movies List";
 }
 
 <h1>Movies</h1>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Genre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Producer)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
+<div class="row mb-3">
+    <div class="col-md-4">
+        <a asp-action="Create" class="btn btn-primary">Create New Movie</a>
+    </div>
+    <div class="col-md-4 text-center">
+        <a asp-action="MoviesAndTheirProds" class="btn btn-info">View Movies & Producers</a>
+    </div>
+    <div class="col-md-4 text-end">
+        <a asp-action="SearchByTitle" class="btn btn-warning">Search by Title</a>
+        <a asp-action="SearchByGenre" class="btn btn-warning">Search by Genre</a>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Genre)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Producer)
+                </th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
 @foreach (var item in Model) {
         <tr>
             <td>
@@ -37,11 +48,12 @@
                 @Html.DisplayFor(modelItem => item.Producer.Name)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Details</a> |
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Edit</a>
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Details</a>
                 <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
             </td>
         </tr>
 }
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>

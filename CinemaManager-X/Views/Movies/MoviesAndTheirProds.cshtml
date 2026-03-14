@@ -1,0 +1,44 @@
+@model IEnumerable<dynamic>
+
+@{
+    ViewData["Title"] = "Movies and Their Producers";
+}
+
+<h1>Movies and Their Producers</h1>
+
+<p>
+    <a asp-controller="Movies" asp-action="Index">Back to Movies List</a>
+</p>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Movie Title</th>
+                <th>Genre</th>
+                <th>Producer Name</th>
+                <th>Producer Nationality</th>
+                <th>Producer Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Movie.Title</td>
+                    <td>@item.Movie.Genre</td>
+                    <td>@item.Producer.Name</td>
+                    <td>@item.Producer.Nationality</td>
+                    <td>@item.Producer.Email</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Movie.Id" 
+                        class="btn btn-warning btn-sm">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.Movie.Id"
+                        class="btn btn-info btn-sm">Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

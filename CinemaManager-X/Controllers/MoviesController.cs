@@ -18,14 +18,12 @@ namespace CinemaManager_X.Controllers
             _context = context;
         }
 
-        // GET: Movies
         public async Task<IActionResult> Index()
         {
             var cinemaDbContext = _context.Movies.Include(m => m.Producer);
             return View(await cinemaDbContext.ToListAsync());
         }
 
-        // GET: Movies/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -44,14 +42,12 @@ namespace CinemaManager_X.Controllers
             return View(movie);
         }
 
-        // GET: Movies/Create
         public IActionResult Create()
         {
             ViewData["ProducerId"] = new SelectList(_context.Producers, "Id", "Name");
             return View();
         }
 
-        // POST: Movies/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,Genre,ProducerId")] Movie movie)
@@ -66,7 +62,6 @@ namespace CinemaManager_X.Controllers
             return View(movie);
         }
 
-        // GET: Movies/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -83,7 +78,6 @@ namespace CinemaManager_X.Controllers
             return View(movie);
         }
 
-        // POST: Movies/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Genre,ProducerId")] Movie movie)
@@ -117,7 +111,6 @@ namespace CinemaManager_X.Controllers
             return View(movie);
         }
 
-        // GET: Movies/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -136,7 +129,6 @@ namespace CinemaManager_X.Controllers
             return View(movie);
         }
 
-        // POST: Movies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -153,6 +145,89 @@ namespace CinemaManager_X.Controllers
         private bool MovieExists(int id)
         {
             return _context.Movies.Any(e => e.Id == id);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> SearchByTitle(string searchTitle)
+        {
+            IQueryable<Movie> movies = _context.Movies.Include(m => m.Producer);
+
+            if (!string.IsNullOrEmpty(searchTitle))
+            {
+                movies = movies.Where(m => m.Title.Contains(searchTitle));
+            }
+
+            return View(await movies.ToListAsync());
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> SearchByGenre(string searchGenre)
+        {
+            IQueryable<Movie> movies = _context.Movies.Include(m => m.Producer);
+
+            if (!string.IsNullOrEmpty(searchGenre))
+            {
+                movies = movies.Where(m => m.Genre.Contains(searchGenre));
+            }
+
+            return View(await movies.ToListAsync());
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> SearchByYear2(string searchGenre, string searchTitle)
+        {
+            IQueryable<Movie> movies = _context.Movies.Include(m => m.Producer);
+
+            if (!string.IsNullOrEmpty(searchGenre) && searchGenre != "All")
+            {
+                movies = movies.Where(m => m.Genre.Contains(searchGenre));
+            }
+
+            if (!string.IsNullOrEmpty(searchTitle))
+            {
+                movies = movies.Where(m => m.Title.Contains(searchTitle));
+            }
+
+            var genres = await _context.Movies
+                .Select(m => m.Genre)
+                .Distinct()
+                .OrderBy(g => g)
+                .ToListAsync();
+
+            ViewData["Genres"] = new SelectList(genres);
+            ViewData["SearchGenre"] = searchGenre;
+            ViewData["SearchTitle"] = searchTitle;
+
+            return View(await movies.ToListAsync());
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> MoviesAndTheirProds()
+        {
+            var moviesWithProds = from m in _context.Movies
+                                 join p in _context.Producers on m.ProducerId equals p.Id
+                                 select new { Movie = m, Producer = p };
+
+            return View(await moviesWithProds.ToListAsync());
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> MoviesAndTheirProds_UsingModel()
+        {
+            var result = from m in _context.Movies
+                        join p in _context.Producers on m.ProducerId equals p.Id
+                        select new
+                        {
+                            MovieId = m.Id,
+                            MovieTitle = m.Title,
+                            MovieGenre = m.Genre,
+                            ProducerId = p.Id,
+                            ProducerName = p.Name,
+                            ProducerNationality = p.Nationality,
+                            ProducerEmail = p.Email
+                        };
+
+            return View(await result.ToListAsync());
         }
     }
 }

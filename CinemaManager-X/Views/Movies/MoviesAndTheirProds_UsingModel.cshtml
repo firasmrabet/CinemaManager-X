@@ -1,0 +1,41 @@
+@model IEnumerable<dynamic>
+
+@{
+    ViewData["Title"] = "Movies and Their Producers (Using LINQ Model)";
+}
+
+<h1>Movies and Their Producers (LINQ Join Model)</h1>
+
+<p>
+    <a asp-controller="Movies" asp-action="Index">Back to Movies List</a>
+</p>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Movie ID</th>
+                <th>Movie Title</th>
+                <th>Movie Genre</th>
+                <th>Producer ID</th>
+                <th>Producer Name</th>
+                <th>Producer Nationality</th>
+                <th>Producer Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.MovieId</td>
+                    <td>@item.MovieTitle</td>
+                    <td>@item.MovieGenre</td>
+                    <td>@item.ProducerId</td>
+                    <td>@item.ProducerName</td>
+                    <td>@item.ProducerNationality</td>
+                    <td>@item.ProducerEmail</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

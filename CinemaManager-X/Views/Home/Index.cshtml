@@ -1,8 +1,92 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "CinemaManager Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="text-center mb-5">
+    <h1 class="display-4">🎬 Welcome to CinemaManager</h1>
+    <p class="lead">Manage your movies and producers efficiently</p>
+</div>
+
+<div class="row">
+    <!-- Producers Section -->
+    <div class="col-md-6 mb-4">
+        <div class="card h-100 shadow">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0">📋 Producers</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Manage film producers and their information</p>
+                <div class="btn-group-vertical w-100" role="group">
+                    <a asp-controller="Producers" asp-action="Index" class="btn btn-outline-primary">View All Producers</a>
+                    <a asp-controller="Producers" asp-action="Create" class="btn btn-outline-primary">Add New Producer</a>
+                    <a asp-controller="Producers" asp-action="ProdsAndTheirMovies" class="btn btn-outline-primary">View Producers & Movies</a>
+                    <a asp-controller="Producers" asp-action="ProdsAndTheirMovies_UsingModel" class="btn btn-outline-primary">Producers (LINQ View)</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Movies Section -->
+    <div class="col-md-6 mb-4">
+        <div class="card h-100 shadow">
+            <div class="card-header bg-success text-white">
+                <h5 class="card-title mb-0">🎥 Movies</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Manage films and search by various criteria</p>
+                <div class="btn-group-vertical w-100" role="group">
+                    <a asp-controller="Movies" asp-action="Index" class="btn btn-outline-success">View All Movies</a>
+                    <a asp-controller="Movies" asp-action="Create" class="btn btn-outline-success">Add New Movie</a>
+                    <a asp-controller="Movies" asp-action="MoviesAndTheirProds" class="btn btn-outline-success">Movies & Producers</a>
+                    <a asp-controller="Movies" asp-action="SearchByTitle" class="btn btn-outline-success">Search by Title</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <!-- Search Section -->
+    <div class="col-md-6 mb-4">
+        <div class="card shadow">
+            <div class="card-header bg-warning">
+                <h5 class="card-title mb-0">🔍 Advanced Search</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text mb-3">Search movies by specific criteria</p>
+                <div class="btn-group-vertical w-100" role="group">
+                    <a asp-controller="Movies" asp-action="SearchByTitle" class="btn btn-outline-warning">Search by Title</a>
+                    <a asp-controller="Movies" asp-action="SearchByGenre" class="btn btn-outline-warning">Search by Genre</a>
+                    <a asp-controller="Movies" asp-action="SearchByYear2" class="btn btn-outline-warning">Advanced Search (Genre + Title)</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Relations Section -->
+    <div class="col-md-6 mb-4">
+        <div class="card shadow">
+            <div class="card-header bg-info text-white">
+                <h5 class="card-title mb-0">🔗 Data Relations</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text mb-3">View relationships between movies and producers</p>
+                <div class="btn-group-vertical w-100" role="group">
+                    <a asp-controller="Movies" asp-action="MoviesAndTheirProds_UsingModel" class="btn btn-outline-info">Movies & Producers (LINQ)</a>
+                    <a asp-controller="Producers" asp-action="ProdsAndTheirMovies" class="btn btn-outline-info">Producers & Their Movies</a>
+                    <a asp-controller="Producers" asp-action="ProdsAndTheirMovies_UsingModel" class="btn btn-outline-info">Producers (LINQ View)</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr class="my-5">
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="alert alert-info" role="alert">
+            <strong>💡 Tip:</strong> Use the navigation bar at the top to access all features including search, CRUD operations, and data relationships.
+        </div>
+    </div>
 </div>
